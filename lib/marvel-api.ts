@@ -24,7 +24,8 @@ const ComicsResponse = t.interface({
     results: t.array(t.interface({
       id: t.number,
       title: t.string,
-      description: t.string,
+      description: t.union([t.string, t.null]),
+      variantDescription: t.string,
       thumbnail: t.interface({
         path: t.string,
         extension: t.string
@@ -35,9 +36,10 @@ const ComicsResponse = t.interface({
 type ComicsResponse = t.TypeOf<typeof ComicsResponse>
 
 export default {
-  getComics: async () => {
+  getComics: async (page = 1) => {
     const url = 'http://gateway.marvel.com/v1/public/comics'
-    const cachedData = myCache.get<ComicsResponse>(url)
+    const cacheKey = `${url}::${page}`
+    const cachedData = myCache.get<ComicsResponse>(cacheKey)
 
     if (cachedData) {
       return cachedData
@@ -45,43 +47,21 @@ export default {
 
     const ts = marvelAuth.getTimestamp()
     const hash = marvelAuth.getHash(apikey, apiPrivKey, ts)
+    const numItems = 20
 
     const res = await client.get(url, {
       params: {
         apikey,
         ts,
-        hash
+        hash,
+        limit: numItems,
+        offset: (page - 1) * numItems
       }
     })
     const data = await tPromise.decode(ComicsResponse, res.data)
 
-    myCache.set(url, data)
+    myCache.set(cacheKey, data)
 
     return data
-  },
-  getComicDetails: async (id: number) => {
-    const url = `http://marvel.com/comics/issue/82967/marvel_previews_2017?utm_campaign=apiRef&utm_source=32bae27493293783bce2ea6332e42618`
-    const cachedData = myCache.get<ComicsResponse>(url);
-
-    if (cachedData) {
-      return cachedData;
-    }
-
-    const ts = marvelAuth.getTimestamp()
-    const hash = marvelAuth.getHash(apikey, apiPrivKey, ts)
-
-    const res = await client.get(url, {
-      params: {
-        apikey,
-        ts,
-        hash
-      }
-    });
-    // const data = await tPromise.decode(ComicsResponse, res.data);
-    const data = res.data
-
-    myCache.set(url, data)
-
-    return data;
   }
 }
