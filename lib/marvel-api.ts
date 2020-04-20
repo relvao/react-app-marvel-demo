@@ -47,7 +47,7 @@ export default {
 
     const ts = marvelAuth.getTimestamp()
     const hash = marvelAuth.getHash(apikey, apiPrivKey, ts)
-    const numItems = 20
+    const numItems = 21
 
     const res = await client.get(url, {
       params: {

@@ -10,6 +10,8 @@ import {
   Segment,
   Modal,
   Image,
+  Input,
+  Grid
 } from 'semantic-ui-react'
 
 import marvelApi from '../lib/marvel-api'
@@ -55,7 +57,18 @@ export default class Home extends React.Component<Props> {
     return (
       <>
         <Container>
-          <Header as="h1" style={{ marginTop: '1em' }}>Marvel Comics</Header>
+          <Grid style={{ marginTop: '1em' }}>
+            <Grid.Row columns={2}>
+              <Grid.Column>
+                <Header as="h1">Marvel Comics</Header>
+              </Grid.Column>
+              <Grid.Column>
+                <Input placeholder='Search by Name' transparent/>
+                <Input placeholder='Search by Date' transparent type="number"/>
+                <Button><Icon name="search"/></Button>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
 
           <Card.Group>{this.renderCards()}</Card.Group>
 
