@@ -26,15 +26,12 @@ interface Props {
 }
 
 interface State {
-  activeComic: Comic | null,
-
-  loading: boolean
+  activeComic: Comic | null
 }
 
 export default class Home extends React.Component<Props> {
   state: State = {
-    activeComic: null,
-    loading: false
+    activeComic: null
   }
 
   cardClickHandler = (activeComic: Comic) => () => {
@@ -42,15 +39,11 @@ export default class Home extends React.Component<Props> {
   }
 
   nextPageHandler = () => {
-    this.setState({ loading: true }, () => {
-      Router.push(`/?page=${this.props.page + 1}`).then(() => window.scrollTo(0, 0))
-    })
+    Router.push(`/?page=${this.props.page + 1}`).then(() => window.scrollTo(0, 0))
   }
 
   prevPageHandler = () => {
-    this.setState({ loading: true }, () => {
-      Router.push(`/?page=${this.props.page - 1}`).then(() => window.scrollTo(0, 0))
-    })
+    Router.push(`/?page=${this.props.page - 1}`).then(() => window.scrollTo(0, 0))
   }
 
   render() {

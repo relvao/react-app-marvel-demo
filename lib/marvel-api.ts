@@ -49,6 +49,7 @@ export default {
     const hash = marvelAuth.getHash(apikey, apiPrivKey, ts)
     const numItems = 21
 
+    // https://developer.marvel.com/docs#!/public/getComicsCollection_get_6
     const res = await client.get(url, {
       params: {
         apikey,
